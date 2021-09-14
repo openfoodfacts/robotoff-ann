@@ -2,7 +2,7 @@ name: Container Image Deployment CI
 
 on:
   push:
-    branches: 
+    branches:
       - main
       - deploy-*
       - release-v*.*.*
@@ -44,10 +44,10 @@ jobs:
         script_stop: false
         script: |
           # Clone Git repository if not already there
-          [ ! -d 'robotoff' ] && git clone --depth 1 https://github.com/openfoodfacts/robotoff/ --no-single-branch 2>&1
+          [ ! -d 'robotoff-ann' ] && git clone --depth 1 https://github.com/openfoodfacts/robotoff-ann/ --no-single-branch 2>&1
 
           # Go to repository directory
-          cd robotoff/
+          cd robotoff-ann/
 
           # Fetch newest commits (in case it wasn't freshly cloned)
           git fetch --depth 1
@@ -67,7 +67,7 @@ jobs:
         script_stop: false
         script: |
           # Go to repository directory
-          cd robotoff/
+          cd robotoff-ann/
 
           # Set Docker Compose variables
           echo "DOCKER_CLIENT_TIMEOUT=120" > .env
@@ -75,21 +75,6 @@ jobs:
           echo "COMPOSE_PATH_SEPARATOR=;" >> .env
           echo "COMPOSE_FILE=docker-compose.yml" >> .env
           echo "TAG=${{ github.sha }}" >> .env
-
-    - name: Create Docker volumes
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        proxy_host: ${{ secrets.PROXY_HOST }}
-        proxy_username: ${{ secrets.USERNAME }}
-        proxy_key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script_stop: false
-        script: |
-          docker volume create postgres-data || echo "Docker volume 'postgres-data' already exist. Skipping."
-          docker volume create api-dataset || echo "Docker volume 'api-dataset' already exist. Skipping."
-          docker volume create es-data || echo "Docker volume 'es-data' already exist. Skipping."
 
     - name: Start services
       uses: appleboy/ssh-action@master
@@ -106,7 +91,7 @@ jobs:
         envs: DOCKER_CLIENT_TIMEOUT,COMPOSE_HTTP_TIMEOUT
         script_stop: false
         script: |
-          cd robotoff/
+          cd robotoff-ann/
           docker-compose up -d --remove-orphans 2>&1
 
     - name: Check services are up
@@ -121,7 +106,7 @@ jobs:
         proxy_key: ${{ secrets.SSH_PRIVATE_KEY }}
         script_stop: false
         script: |
-          cd robotoff/
+          cd robotoff-ann/
           exit_code=0
           for service in robotoff; do 
             if [ -z `docker-compose ps -q $service` ] || [ -z `docker ps -q --no-trunc | grep $(docker-compose ps -q $service)` ]; then
