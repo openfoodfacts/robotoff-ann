@@ -21,6 +21,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Install test utils
+        run: pip install -r requirements_test.txt
+
       - name: Code Quality Black
         run: black . --check
 
@@ -43,6 +46,9 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+
+      - name: Install pytest
+        run: pip install pytest pytest-cov
 
       - name: Launch unit tests
         run: pytest --cov-report xml --cov=. tests
