@@ -21,6 +21,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Install test utils
+        run: pip install black flake8 isort
+
       - name: Code Quality Black
         run: black . --check
 
