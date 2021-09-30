@@ -21,9 +21,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Code Quality Black
-        run: black . --check
-
       - name: Code quality Flake8
         run: flake8 --format github
 
