@@ -10,5 +10,5 @@
        - uses: GoogleCloudPlatform/release-please-action@v2
          with:
            token: ${{ secrets.GITHUB_TOKEN }}
-           release-type: python
+           release-type: simple
            package-name: robotoff-ann
