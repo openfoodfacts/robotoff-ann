@@ -22,7 +22,7 @@ goodbye:
 #----------------#
 up:
 	@echo "🥫 Building and starting containers …"
-	${DOCKER_COMPOSE} up -d --remove-orphans --build 2>&1
+	${DOCKER_COMPOSE} up -d --build 2>&1
 
 down:
 	@echo "🥫 Bringing down containers …"
@@ -40,6 +40,10 @@ status:
 	@echo "🥫 Getting container status …"
 	${DOCKER_COMPOSE} ps
 
+livecheck:
+	@echo "🥫 Running livecheck …"
+	docker/docker-livecheck.sh
+
 log:
 	@echo "🥫 Reading logs (docker-compose) …"
 	${DOCKER_COMPOSE} logs -f
@@ -49,9 +53,7 @@ log:
 #------------#
 create_external_volumes:
 	@echo "🥫 Creating external volumes (production only) …"
-	for volume in ann_data; do \
-		docker volume create $$volume || echo "Docker volume '$$volume' already exist. Skipping."; \
-	done
+	docker volume create ann_data
 
 #---------#
 # Cleanup #
