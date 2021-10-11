@@ -8,5 +8,7 @@ services:
       - 5501:5501
     volumes:
       - ann_data:/opt/ann/data
+    environment:
+      - SENTRY_DSN
 volumes:
   ann_data:
