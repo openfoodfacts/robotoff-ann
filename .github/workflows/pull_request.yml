@@ -21,6 +21,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Install test dependencies
+        run: pip install -r requirements_test.txt
+
       - name: Code quality Flake8
         run: flake8 --format github
 
@@ -41,8 +44,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install pytest
-        run: pip install pytest pytest-cov
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements_test.txt
 
       - name: Launch unit tests
         run: pytest --cov-report xml --cov=. tests
