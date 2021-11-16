@@ -77,7 +77,7 @@ jobs:
           echo "COMPOSE_HTTP_TIMEOUT=120" >> .env
           echo "COMPOSE_PATH_SEPARATOR=;" >> .env
           echo "COMPOSE_FILE=docker-compose.yml" >> .env
-          echo "TAG=${{ github.sha }}" >> .env
+          echo "TAG=sha-${{ github.sha }}" >> .env
 
           # Set app variables
           echo "ANN_INSTANCE=${{ startsWith(github.ref, 'refs/tags/v') && 'prod' || 'dev' }}" >> .env
