@@ -48,6 +48,43 @@ log:
 	@echo "🥫 Reading logs (docker-compose) …"
 	${DOCKER_COMPOSE} logs -f
 
+#---------#
+# Quality #
+#---------#
+
+up_tests:
+	@echo "🥫 Run a test docker"
+	docker rm -f robotoff-ann-tests
+	${DOCKER_COMPOSE} run --rm -d --name robotoff-ann-tests ann  tail -f /dev/null
+	docker exec -u root robotoff-ann-tests pip install -r requirements_test.txt
+
+down_tests:
+	@echo "🥫 shutdown test docker"
+	docker rm -f robotoff-ann-tests
+
+_lint:
+	@echo "🥫 Linting"
+	docker exec robotoff-ann-tests isort .
+	docker exec robotoff-ann-tests black .
+
+lint: up_tests _lint down_tests
+
+_checks:
+	@echo "🥫 Run checks"
+	docker exec robotoff-ann-tests isort --check .
+	docker exec robotoff-ann-tests black --check .
+
+checks: up_tests _checks down_tests
+
+_tests:
+	@echo "🥫 Run ctests"
+	docker exec robotoff-ann-tests pytest tests
+
+tests: up_tests _tests down_tests
+
+quality: up_tests _lint _checks _tests down_tests
+
+
 #------------#
 # Production #
 #------------#
