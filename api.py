@@ -5,13 +5,14 @@ from typing import Any, Dict, List, Optional
 import annoy
 import falcon
 import numpy as np
-import schema
-import settings
-from embeddings import EMBEDDING_STORE, add_logos, get_embedding
 from falcon.media.validators import jsonschema
 from falcon_cors import CORS
 from falcon_multipart.middleware import MultipartMiddleware
 from sentry_sdk.integrations.falcon import FalconIntegration
+
+import schema
+import settings
+from embeddings import EMBEDDING_STORE, add_logos, get_embedding
 from utils import get_image_from_url, get_logger, text_file_iter
 
 logger = get_logger()
