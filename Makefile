@@ -73,6 +73,7 @@ _checks:
 	@echo "🥫 Run checks"
 	docker exec robotoff-ann-tests isort --check .
 	docker exec robotoff-ann-tests black --check .
+	docker exec robotoff-ann-tests flake8
 
 checks: up_tests _checks down_tests
 
