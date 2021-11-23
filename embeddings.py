@@ -4,10 +4,11 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import h5py
 import numpy as np
-import settings
 import torch
 from efficientnet_pytorch import EfficientNet
 from PIL import Image
+
+import settings
 
 
 class EmbeddingStore:

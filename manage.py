@@ -14,9 +14,10 @@ if __name__ == "__main__":
         import shutil
         import tempfile
 
-        import settings
         import tqdm
         from annoy import AnnoyIndex
+
+        import settings
         from embeddings import EmbeddingStore
         from utils import get_logger
 
