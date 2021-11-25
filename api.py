@@ -50,7 +50,7 @@ INDEXES: Dict[str, ANNIndex] = {
     for index_dir in settings.DATA_DIR.iterdir()
     if index_dir.is_dir()
 }
-logger.info("Index loaded")
+logger.info(f"Indexes loaded: {INDEXES.keys()}")
 
 
 class ANNResource:
