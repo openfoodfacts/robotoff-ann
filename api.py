@@ -83,6 +83,8 @@ class ANNBatchResource:
         logo_ids = req.get_param_as_list(
             "logo_ids", required=True, transform=int, default=[]
         )
+        logger.info(f"Received request for {index_name}, logos: {logo_ids}")
+
         if index_name not in INDEXES:
             raise falcon.HTTPBadRequest("unknown index: {}".format(index_name))
 
@@ -105,19 +107,23 @@ def get_nearest_neighbors(
     ann_index: ANNIndex, count: int, logo_id: int
 ) -> Optional[List[Dict[str, Any]]]:
     if logo_id in ann_index.key_to_ann_id:
+        logger.info(f"Trying to get nns for logo `{logo_id}`")
         item_index = ann_index.key_to_ann_id[logo_id]
         indexes, distances = ann_index.index.get_nns_by_item(
             item_index, count, include_distances=True
         )
+        logger.info("Successfully retrieved distances and indexes")
     else:
+        logger.info(f"Trying to get an embedding for logo `{logo_id}`")
         embedding = get_embedding(logo_id)
-
+        logger.info(f"Found an embedding: {embedding}")
         if embedding is None:
             return None
 
         indexes, distances = ann_index.index.get_nns_by_vector(
             embedding, count, include_distances=True
         )
+        logger.info("Successfully retrieved distances and indexes")
 
     logo_ids = [ann_index.keys[index] for index in indexes]
     results = []
