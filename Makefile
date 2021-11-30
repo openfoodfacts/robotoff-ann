@@ -85,14 +85,6 @@ tests: up_tests _tests down_tests
 
 quality: up_tests _lint _checks _tests down_tests
 
-
-#------------#
-# Production #
-#------------#
-create_external_volumes:
-	@echo "🥫 Creating external volumes (production only) …"
-	docker volume create ann_data
-
 #---------#
 # Cleanup #
 #---------#
