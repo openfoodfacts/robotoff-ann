@@ -12,7 +12,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     strategy:
-      matrix: 
+      matrix:
         env:
           - ${{ startsWith(github.ref, 'refs/tags/v') && 'robotoff-ann-org' || 'robotoff-ann-net' }}
     environment: ${{ matrix.env }}

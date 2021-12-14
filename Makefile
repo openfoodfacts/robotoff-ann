@@ -17,6 +17,8 @@ hello:
 goodbye:
 	@echo "🥫 Cleaning up dev environment (remove containers, remove local folder binds, prune Docker system) …"
 
+dev: hello init-data up
+
 #----------------#
 # Docker Compose #
 #----------------#
@@ -84,6 +86,14 @@ _tests:
 tests: up_tests _tests down_tests
 
 quality: up_tests _lint _checks _tests down_tests
+
+#------#
+# Data #
+#------#
+init-data:
+	@curl https://static.openfoodfacts.org/data/efficientnet.tar.gz
+	tar -xf efficientnet.tar.gz -C ann_data/
+	rm efficientnet.tar.gz
 
 #---------#
 # Cleanup #
