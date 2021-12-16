@@ -91,7 +91,7 @@ quality: up_tests _lint _checks _tests down_tests
 # Data #
 #------#
 init-data:
-	@curl https://static.openfoodfacts.org/data/efficientnet.tar.gz --output efficientnet.tar.gz -m 1800
+	@curl --output efficientnet.tar.gz -m 1800 -C - https://static.openfoodfacts.org/data/efficientnet.tar.gz
 	tar -xf efficientnet.tar.gz -C ann_data/ --strip-component=1
 	rm efficientnet.tar.gz
 
