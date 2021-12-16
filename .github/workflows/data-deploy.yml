@@ -3,7 +3,7 @@
 # on:
 #   push:
 #     branches:
-#       - efficientnet-*
+#       - deploy-efficientnet-*
 #     tags: 
 #       - v*.*.*
 
@@ -19,9 +19,6 @@
 #     steps:
 #     - name: Download efficientnet
 #       uses: appleboy/ssh-action@master
-#       env:
-#         DOCKER_CLIENT_TIMEOUT: 120
-#         COMPOSE_HTTP_TIMEOUT: 120
 #       with:
 #         host: ${{ secrets.HOST }}
 #         username: ${{ secrets.USERNAME }}
@@ -29,7 +26,8 @@
 #         proxy_host: ${{ secrets.PROXY_HOST }}
 #         proxy_username: ${{ secrets.USERNAME }}
 #         proxy_key: ${{ secrets.SSH_PRIVATE_KEY }}
-#         envs: DOCKER_CLIENT_TIMEOUT,COMPOSE_HTTP_TIMEOUT
+#         timeout: 1800s
+#         command_timeout: 1800s
 #         script_stop: false
 #         script: |
 #           cd ${{ matrix.env }}
