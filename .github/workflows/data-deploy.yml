@@ -33,8 +33,4 @@ jobs:
         script_stop: false
         script: |
           cd ${{ matrix.env }}
-          mv .env ../.env
-          git fetch --depth 1
-          git checkout -qf ${{ github.sha }}
-          mv ../.env .env
           make init-data
