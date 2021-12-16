@@ -3,7 +3,7 @@ name: ANN Data Deployment CI
 on:
   push:
     branches:
-      - efficientnet-*
+      - deploy-efficientnet-*
     tags: 
       - v*.*.*
 
