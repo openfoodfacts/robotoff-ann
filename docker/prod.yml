@@ -1,5 +1,0 @@
-version: "3.9"
-services:
-  ann:
-    volumes:
-    - /mnt/storage/ann_data:/opt/ann/data
