@@ -14,11 +14,11 @@ jobs:
     strategy:
       matrix:
         env:
-          - ${{ startsWith(github.ref, 'deploy-ag-fix-folders') && 'robotoff-ann-org' || 'robotoff-ann-net' }}
+          - robotoff-ann-org
         data_path:
-          - ${{ startsWith(github.ref, 'deploy-ag-fix-folders') && '/mnt/storage/ann_data_org' || '/mnt/storage/ann_data_net' }}
+          - /mnt/storage/ann_data_org
         env_type:
-          - ${{ startsWith(github.ref, 'deploy-ag-fix-folders') && 'prod' || 'dev' }}
+          - prod'
     environment: ${{ matrix.env }}
     steps:
     - name: Wait for container build workflow
