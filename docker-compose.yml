@@ -5,8 +5,8 @@ services:
     restart: always
     image: ghcr.io/openfoodfacts/robotoff-ann:${TAG}
     ports:
-      - 5501:5501
+      - ${ANN_EXPOSE:-5501}:5501
     volumes:
-      - ./ann_data:/opt/ann/data
+      - ${ANN_DATA_MOUNT_POINT:-./ann_data}:/opt/ann/data
     environment:
       - SENTRY_DSN
