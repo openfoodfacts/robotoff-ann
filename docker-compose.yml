@@ -7,6 +7,6 @@ services:
     ports:
       - 5501:5501
     volumes:
-      - ./ann_data:/opt/ann/data
+      - ${DATA_MOUNT_POINT:-./ann_data}:/opt/ann/data
     environment:
       - SENTRY_DSN

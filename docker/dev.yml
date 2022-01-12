@@ -4,5 +4,3 @@ services:
   ann:
     build: .
     image: openfoodfacts/robotoff-ann:dev
-    volumes:
-      - ./:/opt/ann
