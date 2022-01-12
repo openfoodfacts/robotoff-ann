@@ -14,11 +14,11 @@ jobs:
     strategy:
       matrix:
         env:
-          - robotoff-ann-org
+          - ${{ startsWith(github.ref, 'refs/tags/v') && 'robotoff-ann-org' || 'robotoff-ann-net' }}
         data_path:
-          - /mnt/storage/ann_data_org
+          - ${{ startsWith(github.ref, 'refs/tags/v') && '/mnt/storage/ann_data_org' || '/mnt/storage/ann_data_net' }}
         env_type:
-          - prod'
+          - ${{ startsWith(github.ref, 'refs/tags/v') && 'prod' || 'dev' }}
     environment: ${{ matrix.env }}
     steps:
     - name: Wait for container build workflow
