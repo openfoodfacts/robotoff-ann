@@ -24,7 +24,10 @@ _sentry_dsn = os.environ.get("SENTRY_DSN")
 
 
 def init_sentry(integrations: Sequence[Integration] = ()):
-    if _sentry_dsn:
+    if _sentry_dsn.lower() == "disabled":
+        # sentry is disabled, eg. for dev
+        pass
+    elif _sentry_dsn:
         sentry_sdk.init(
             _sentry_dsn,
             environment=_ann_instance,
