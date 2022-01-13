@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   ann:
-    restart: always
+    restart: ${RESTART_POLICY:-always}
     image: ghcr.io/openfoodfacts/robotoff-ann:${TAG}
     ports:
       - ${ANN_EXPOSE:-5501}:5501
