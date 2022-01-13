@@ -15,8 +15,6 @@ jobs:
       matrix:
         env:
           - ${{ startsWith(github.ref, 'refs/tags/v') && 'robotoff-ann-org' || 'robotoff-ann-net' }}
-        data_path:
-          - ${{ startsWith(github.ref, 'refs/tags/v') && '/mnt/storage/ann_data_org' || '/mnt/storage/ann_data_net' }}
         env_type:
           - ${{ startsWith(github.ref, 'refs/tags/v') && 'prod' || 'dev' }}
     environment: ${{ matrix.env }}
@@ -86,7 +84,7 @@ jobs:
 
           # Set app variables
           echo "ANN_INSTANCE=${{ matrix.env_type }}" >> .env
-          echo "ANN_DATA_MOUNT_POINT=${{ matrix.data_path }}" >> .env
+          echo "ANN_DATA_MOUNT_POINT=./ann_data" >> .env
           echo "SENTRY_DSN=${{ secrets.SENTRY_DSN }}" >> .env
 
     - name: Start services
