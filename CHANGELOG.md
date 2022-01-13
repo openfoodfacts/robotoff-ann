@@ -1,5 +1,14 @@
 # Changelog
 
+### [1.0.1](https://www.github.com/openfoodfacts/robotoff-ann/compare/v1.0.0...v1.0.1) (2022-01-13)
+
+
+### Bug Fixes
+
+* deployment SENTRY_DSN variable ([2bfe333](https://www.github.com/openfoodfacts/robotoff-ann/commit/2bfe333f227da1e9b04de8c56a58129648f5fa63))
+* external ann_data volume should be bind-mounted ([da7d123](https://www.github.com/openfoodfacts/robotoff-ann/commit/da7d123e8aae7503b45072cb75d158f73316f512))
+* fix on pull request action ([1497487](https://www.github.com/openfoodfacts/robotoff-ann/commit/149748721a7b8537bbe6471d013541ae53c7b0f3))
+
 ## 1.0.0 (2021-09-30)
 
 
