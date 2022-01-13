@@ -1,5 +1,9 @@
 FROM python:3.7-slim
 
+# specific options to compiler for annoy build
+# useful for eg. disabling avx512 instruction set
+ARG ANNOY_COMPILER_ARGS=
+
 WORKDIR /opt/ann
 
 RUN apt-get update && \
@@ -10,6 +14,7 @@ RUN apt-get update && \
 
 COPY *.py /opt/ann/
 COPY requirements.txt /opt/ann/
+ENV ANNOY_COMPILER_ARGS=${ANNOY_COMPILER_ARGS}
 RUN pip3 install --no-cache-dir -r /opt/ann/requirements.txt
 
 WORKDIR /opt/ann
