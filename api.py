@@ -57,6 +57,20 @@ class ANNResource:
     def on_get(
         self, req: falcon.Request, resp: falcon.Response, logo_id: Optional[int] = None
     ):
+        """Get nearest neighbors of logo `logo_id`.
+
+        + index (str, optional): Name of the ANN index to use.
+        + count (int, optional) - Number of results to return
+            (default: 100, min: 1, max: 500)
+
+        - Parameters:
+
+            - logo_id (str, optional) - External ID (logo_annotation.id in
+              PostgreSQL) of the target logo. If not provided, a random
+              `logo_id` in the index is selected.
+
+            - Response 200 (application/json) 
+        """
         index_name = req.get_param("index", default=settings.DEFAULT_INDEX)
         count = req.get_param_as_int("count", min_value=1, max_value=500, default=100)
 
@@ -78,6 +92,16 @@ class ANNResource:
 
 class ANNBatchResource:
     def on_get(self, req: falcon.Request, resp: falcon.Response):
+        """Get nearest neighbors for a batch of logos.
+
+        + logo_ids (str, optional) - comma-separated list of logo IDs to
+          use as targets during ANN search.
+        + index (str, optional): Name of the ANN index to use.
+        + count (int, optional) - Number of results to return
+          (default: 100, min: 1, max: 500)
+
+        - Response 200 (application/json) 
+        """
         index_name = req.get_param("index", default=settings.DEFAULT_INDEX)
         count = req.get_param_as_int("count", min_value=1, max_value=500, default=100)
         logo_ids = req.get_param_as_list(
@@ -170,6 +194,16 @@ class ANNEmbeddingResource:
 class AddLogoResource:
     @jsonschema.validate(schema.ADD_LOGO_SCHEMA)
     def on_post(self, req: falcon.Request, resp: falcon.Response):
+        """Register new logos.
+
+        + image_url (str) - comma-separated list of logo IDs to
+            use as targets during ANN search.
+        + logos (dict): detected logo to use as input.
+        + count (int, optional) - Number of results to return
+            (default: 100, min: 1, max: 500)
+
+        - Response 200 (application/json) 
+        """
         image_url = req.media["image_url"]
         logos = req.media["logos"]
         logo_ids = [logo["id"] for logo in logos]
