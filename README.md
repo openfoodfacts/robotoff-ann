@@ -19,7 +19,10 @@ See more in Makefile.
 From images we extract logos (logo detection is in robotoff).
 Those logos are embedded in a metric space using a specific model[^embedding].
 
-We use [approximate nearest neighbors](https://en.wikipedia.org/wiki/Nearest_neighbor_search#Approximate_nearest_neighbor) [^ann_index]
+![Artist view of logo embeddings](./docs/logos-embedding.jpg)
+
+We then use [approximate nearest neighbors](https://en.wikipedia.org/wiki/Nearest_neighbor_search#Approximate_nearest_neighbor) [^ann_index]
+in this metric space
 to try to classify the logos from known examples [KNN](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm).
 
 Those logos will then
