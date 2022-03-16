@@ -31,6 +31,8 @@ def load_keys(file_path: pathlib.Path) -> List[int]:
 
 
 class ANNIndex:
+    """Approximate Nearest neighbors index"""
+
     def __init__(self, index: annoy.AnnoyIndex, keys: List[int]):
         self.index: annoy.AnnoyIndex = index
         self.keys: List[int] = keys

@@ -1,3 +1,7 @@
+"""This module provides the embedding store
+and the methods to feed it from images.
+"""
+
 import operator
 import pathlib
 from typing import Any, Dict, Iterable, List, Optional, Tuple
@@ -12,6 +16,8 @@ import settings
 
 
 class EmbeddingStore:
+    """Store logo data and embeddings"""
+
     def __init__(self, hdf5_path: pathlib.Path):
         self.hdf5_path = hdf5_path
         self.logo_id_to_idx: Dict[int, int] = self.load()
@@ -75,6 +81,7 @@ class EmbeddingStore:
         embeddings: np.ndarray,
         external_ids: np.ndarray,
     ):
+        """Add new image embeddings to the store"""
         file_exists = self.hdf5_path.is_file()
 
         with h5py.File(self.hdf5_path, "a") as f:
@@ -147,6 +154,9 @@ def add_logos(
     bounding_boxes: List[Tuple[float, float, float, float]],
     device: Optional[torch.device] = None,
 ) -> int:
+    """Compute embeddings for logo extracted from a image
+    and add them to the store.
+    """
     if device is None:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
