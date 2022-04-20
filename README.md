@@ -1,7 +1,6 @@
 # Robotoff ANN
 
-This project helps [robotoff](https://github.com/openfoodfacts/robotoff) in categorizing logos.
-
+This project helps [robotoff](https://github.com/openfoodfacts/robotoff) in categorizing logos. Bug tracking is mostly [done on the main Robotoff repository](https://github.com/openfoodfacts/robotoff/issues/596)
 ## Tangible results
 * You can see all the crops generated and up for manual annotation in [Hunger Games](https://hunger.openfoodfacts.org/logos), our gamified annotation engine.
 * Robotoff pings new crops and annotations in the #robotoff-alerts-annotations Slack channel
