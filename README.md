@@ -2,6 +2,10 @@
 
 This project helps [robotoff](https://github.com/openfoodfacts/robotoff) in categorizing logos.
 
+## Tangible results
+* You can see all the crops generated and up for manual annotation in [Hunger Games](https://hunger.openfoodfacts.org/logos), our gamified annotation engine.
+* Robotoff pings new crops and annotations in the #robotoff-alerts-annotations Slack channel
+
 ## Contributing
 
 To setup the project you must have a recent version of docker and docker-compose installed.
