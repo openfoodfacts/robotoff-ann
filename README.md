@@ -50,6 +50,43 @@ and `settings.DEFAULT_MODEL`
 
 [^index_regenerate]: see `manage.generate_index`
 
+
+### How does it work ?
+
+* The ANN /add endpoints works as follows:
+* from the raw image and detected bounding boxes, we crop the image to get all detected logos.
+* Each logo is provided as input to the neural network (here an EfficientNet), to get an embedding for each logo.
+* The embedding is saved locally on an HDF5 file (https://github.com/openfoodfacts/robotoff-ann/blob/6abaee7ec187587556431d96ed97ea71be0ad848/embeddings.py#L72).
+
+
+### Annotation
+* https://wiki.openfoodfacts.org/Logo_Annotation_Guidelines 
+* https://annotate.openfoodfacts.org 
+* Based on opencv/cvat: Powerful and efficient Computer Vision Annotation Tool (CVAT)  
+* Currently 502 Bad Gateway: https://github.com/openfoodfacts/openfoodfacts-infrastructure/issues/49 
+* Documentation: https://annotate.openfoodfacts.org/documentation/user_guide.html#creating-an-annotation-task 
+* train a "universal" logo / label detector, with good results
+* for each image crop resulting from the annotations (bounding box), generate embeddings with a pre-trained network (Resnet50). 
+* This made it possible to verify that this approach is the right one for the classification of crops
+* the results are in the presentation: 3 photos et c'est à peu près tout
+
+#### Annotation guidelines
+* there should be as little space as possible between the bounding box and the object. Conversely, the whole object must be included in the bounding box.
+* if the object is partially hidden, indicate the object as "occluded" (click on the "profile" icon on the object in question, in the right panel)
+* for best results, it is necessary that similar objects are annotated in the same way (especially concerning the extent of the object). It happens that there are several scales of annotation (cf the question discussed above of pictograms "to recycle"), the most important is that the annotations are coherent.
+* several very similar images or concerning the same product follow one another in the dataset. For the next campaign, it will be better to shuffle the dataset to have as much diversity as possible (edited)
+
+
+### Colab notebooks
+* (Accessible by Pierre) https://colab.research.google.com/drive/1G-6OELcz8l1u1_53_0a2DAKRryIfB9CE 
+* The predictions on the validation set: output_images
+#### Pipeline on colab
+* Data preprocessing : https://colab.research.google.com/drive/1cxi_aITHEFo4IZRsbiwm39CFgDKMG8LZ
+* Model training : https://colab.research.google.com/drive/1qGz2tNC29IRqji4hKebmu249WaUP7u0_
+* Visualization of results : https://colab.research.google.com/drive/1etqj-OgPEHi6ypjCixGSBTEW7muM6bc0
+
+### Roadmap
+
 ### API routes
 #### ANNResource: Allows you to do XYZ
 /api/v1/ann/{logo_id:int}
