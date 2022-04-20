@@ -11,7 +11,7 @@ Pillow==7.1.2
 requests==2.23.0
 jsonschema==3.2.0
 click==7.1.2
-tqdm==4.47.0
+tqdm==4.64.0
 # this is important because annoy compilation is optimized
 # and default package is for modern CPUs
 # it also allows to use ANNOY_COMPILER_ARGS env variable to control compilation
