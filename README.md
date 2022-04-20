@@ -3,7 +3,7 @@
 This project helps [robotoff](https://github.com/openfoodfacts/robotoff) in categorizing logos.
 
 ## Tangible results
-* You can see all the crops generated and up for manual annotation in Hunger Games, our gamified annotation engine.
+* You can see all the crops generated and up for manual annotation in [Hunger Games](https://hunger.openfoodfacts.org/logos), our gamified annotation engine.
 * Robotoff pings new crops and annotations in the #xxx Slack channel
 
 ## Contributing
