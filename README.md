@@ -50,6 +50,10 @@ and `settings.DEFAULT_MODEL`
 
 [^index_regenerate]: see `manage.generate_index`
 
+### Preliminary research
+* Here is the FaceNet paper we talked about yesterday (from Google and not Facebook as I said yesterday): https://arxiv.org/abs/1503.03832
+* A blog post that explains the “triplet mining” introduced by the above paper: https://omoindrot.github.io/triplet-loss
+
 
 ### How does it work ?
 
