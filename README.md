@@ -46,3 +46,19 @@ and `settings.DEFAULT_MODEL`
 [^add_logo]: see `api.AddLogoResource`
 
 [^index_regenerate]: see `manage.generate_index`
+
+### API routes
+#### ANNResource: Allows you to do XYZ
+/api/v1/ann/{logo_id:int}
+#### ANNResource: Allows you to do XYZ
+/api/v1/ann
+#### ANNBatchResource: Allows you to do XYZ
+/api/v1/ann/batch
+#### ANNEmbeddingResource: Allows you to do XYZ
+/api/v1/ann/from_embedding
+#### AddLogoResource: Allows you to do XYZ
+/api/v1/ann/add
+#### ANNCountResource: Allows you to do XYZ
+/api/v1/ann/count
+#### ANNStoredLogoResource: Allows you to do XYZ
+/api/v1/ann/stored
