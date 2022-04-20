@@ -102,3 +102,11 @@ and `settings.DEFAULT_MODEL`
 /api/v1/ann/count
 #### ANNStoredLogoResource: Allows you to do XYZ
 /api/v1/ann/stored
+
+### Datasets
+
+* https://openfoodfacts.slack.com/files/UN6TMCYA2/FNGUPS00H/off_barcode.csv 
+* Photo archive: Archive.zip (995mo): https://drive.google.com/file/d/1-N79A9jpVzR-al8aNFJNWvs59wM_M6sx/view
+* https://openfoodfacts.slack.com/files/UN6TMCYA2/FQWLFNPF0/relabeled_labels_brands.tfrecord 
+* https://openfoodfacts.slack.com/files/UN6TMCYA2/FQWA1AZ9V/labels_brands.tfrecord 
+* https://openfoodfacts.slack.com/files/UN6TMCYA2/FQFLJKYG2/relabel_tfrecord.ipynb 
