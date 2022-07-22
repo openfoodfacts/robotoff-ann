@@ -4,7 +4,7 @@ falcon==2.0.0
 falcon-cors==1.1.7
 falcon-multipart==0.2.0
 sentry-sdk[falcon]==0.14.4
-efficientnet_pytorch==0.6.3
+efficientnet_pytorch==0.7.1
 torch==1.5.0
 h5py==2.10.0
 Pillow==7.1.2
