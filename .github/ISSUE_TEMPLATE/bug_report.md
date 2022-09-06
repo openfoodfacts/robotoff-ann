@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 ### What
-A clear and concise description of what the bug is.
+<!-- A clear and concise description of what the bug is.-->
 
 ### Steps to reproduce the behavior:
 1. Go to '...'
@@ -16,10 +16,10 @@ A clear and concise description of what the bug is.
 3. See error
 
 ### Expected behavior
-A clear and concise description of what you expected to happen.
+<!-- A clear and concise description of what you expected to happen.-->
 
 ### Screenshots
-(Optional, delete if not needed)
+<!-- (Optional, delete if not needed)-->
 
 ### Platform (Desktop, Mobile, Hunger Games)
  - OS: [e.g. iOS, Android, Desktop]
