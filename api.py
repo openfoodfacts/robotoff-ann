@@ -21,7 +21,14 @@ settings.init_sentry(integrations=[FalconIntegration()])
 
 
 class ANNIndex:
-    """Approximate Nearest neighbors index"""
+    """This class store an Annoy approximate nearest neighbors index and the
+    keys associated with each item in the index. Each key corresponds to the
+    logo annotation ID (primary key) in the LogoAnnotation table.
+    
+    :param index: An Annoy index
+    :param keys: The ordered list of keys associated with the items in the
+    index
+    """
 
     def __init__(self, index: annoy.AnnoyIndex, keys: List[int]):
         self.index: annoy.AnnoyIndex = index
@@ -30,6 +37,14 @@ class ANNIndex:
 
     @classmethod
     def load(cls, index_dir: pathlib.Path) -> "ANNIndex":
+        """Load an Annoy ANN index from an index directory.
+        
+        The directory must contain two files:
+        - the index named index.bin
+        - the external keys (logo annotation IDs) in a file named index.txt
+
+        :param index_dir: The index directory to use
+        """
         dimension = settings.INDEX_DIM[index_dir.name]
         index = annoy.AnnoyIndex(dimension, "euclidean")
         index.load(str(index_dir / settings.INDEX_FILE_NAME), prefault=True)
@@ -50,6 +65,10 @@ class ANNResource:
     def on_get(
         self, req: falcon.Request, resp: falcon.Response, logo_id: Optional[int] = None
     ):
+        """Search for nearest neighbors of:
+        - a random logo (if logo_id not provided)
+        - a specific logo otherwise
+        """
         index_name = req.get_param("index", default=settings.DEFAULT_INDEX)
         count = req.get_param_as_int("count", min_value=1, max_value=500, default=100)
 
@@ -71,6 +90,7 @@ class ANNResource:
 
 class ANNBatchResource:
     def on_get(self, req: falcon.Request, resp: falcon.Response):
+        """Batch version (several logos) of ANNResource."""
         index_name = req.get_param("index", default=settings.DEFAULT_INDEX)
         count = req.get_param_as_int("count", min_value=1, max_value=500, default=100)
         logo_ids = req.get_param_as_list(
@@ -99,6 +119,22 @@ class ANNBatchResource:
 def get_nearest_neighbors(
     ann_index: ANNIndex, count: int, logo_id: int
 ) -> Optional[List[Dict[str, Any]]]:
+    """Return the nearest neighbors of a logo, using the ANN index.
+    
+    The way we find nearest neighbors depends on whether the queried logo is
+    indexed in the ANN:
+    - if it is, we simply get the item index in the ANN index and query nearest
+    neighbors using get_nns_by_item
+    - otherwise we fetch the logo embedding in the EmbeddingStore and query
+    nearest neighbors using get_nns_by_vector.
+    This EmbeddingStore is updated with new logo embeddings each time POST /ann/add
+    is called from robotoff.
+
+    :param ann_index: The ANN index to use
+    :param count: The number of results to return
+    :param logo_id: The logo external ID (primary key in LogoAnnotation table)
+    to use as query
+    """
     if logo_id in ann_index.key_to_ann_id:
         logger.info(f"Trying to get nns for logo `{logo_id}`")
         item_index = ann_index.key_to_ann_id[logo_id]
@@ -129,6 +165,12 @@ def get_nearest_neighbors(
 
 class ANNEmbeddingResource:
     def on_post(self, req: falcon.Request, resp: falcon.Response):
+        """Search for nearest neighbors using an embedding as input.
+        
+        Note that it's the client responsability to make sure the embedding
+        has been generated using the same model as the one that generated index
+        embeddings.
+        """
         index_name = req.get_param("index", default=settings.DEFAULT_INDEX)
 
         if index_name not in INDEXES:
@@ -163,6 +205,11 @@ class ANNEmbeddingResource:
 class AddLogoResource:
     @jsonschema.validate(schema.ADD_LOGO_SCHEMA)
     def on_post(self, req: falcon.Request, resp: falcon.Response):
+        """Compute the embeddings of newly detected logos and store them in
+        the EmbeddingStore.
+
+        This allow nearest neighbors to be computed on new logos.
+        """
         image_url = req.media["image_url"]
         logos = req.media["logos"]
         logo_ids = [logo["id"] for logo in logos]
@@ -191,11 +238,14 @@ class AddLogoResource:
 
 class ANNCountResource:
     def on_get(self, req: falcon.Request, resp: falcon.Response):
+        """Return the number of logos stored in the EmbeddingStore (number of
+        logos that can be used as query)."""
         resp.media = {"count": len(EMBEDDING_STORE)}
 
 
 class ANNStoredLogoResource:
     def on_get(self, req: falcon.Request, resp: falcon.Response):
+        """Return the list of logo IDs stored in the EmbeddingStore."""
         resp.media = {"stored": list(EMBEDDING_STORE.get_logo_ids())}
 
 

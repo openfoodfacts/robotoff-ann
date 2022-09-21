@@ -11,6 +11,12 @@ if __name__ == "__main__":
     @click.argument("output", type=pathlib.Path)
     @click.option("--tree-count", type=int, default=100)
     def generate_index(output: pathlib.Path, tree_count: int):
+        """Create a new version of the index using all embeddings stored in
+        the EmbeddingStore.
+        
+        :param output: Path of the output index
+        :param tree_count: Number of trees to use when building the Annoy index
+        """
         import shutil
         import tempfile
 
@@ -26,6 +32,8 @@ if __name__ == "__main__":
         with tempfile.TemporaryDirectory() as tmp_dir:
             embedding_path = pathlib.Path(tmp_dir) / "embeddings.hdf5"
             logger.info(f"Copying embedding file to {embedding_path}...")
+            # Copy embedding files to a temporary location to avoid modification during
+            # index generation
             shutil.copy(str(settings.EMBEDDINGS_HDF5_PATH), str(embedding_path))
 
             logger.info(f"Loading {embedding_path}...")

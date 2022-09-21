@@ -1,5 +1,6 @@
-"""This module provides the embedding store
-and the methods to feed it from images.
+"""
+This module provides the embedding store and the methods to add embeddings to
+it from images.
 """
 
 import operator
@@ -16,11 +17,18 @@ import settings
 
 
 class EmbeddingStore:
-    """Store logo data and embeddings"""
+    """A class to store logo data and embeddings.
+    
+    Embeddings are stored locally on disk in an HDF5 file.
+
+    :param hdf5_path: Path of the HDF5 file where the logo embeddings are
+    stored. If the file does not exist, the file will be created the first
+    time `save_embeddings` is called
+    """
 
     def __init__(self, hdf5_path: pathlib.Path):
         self.hdf5_path = hdf5_path
-        self.logo_id_to_idx: Dict[int, int] = self.load()
+        self.logo_id_to_idx: Dict[int, int] = self.load_logo_id_to_index(hdf5_path)
         self.offset = (
             max(self.logo_id_to_idx.values()) + 1 if self.logo_id_to_idx else 0
         )
@@ -32,12 +40,21 @@ class EmbeddingStore:
         return self.get_index(logo_id) is not None
 
     def get_logo_ids(self) -> Iterable[int]:
+        """Return an iterable of the external IDs of stored logos."""
         return self.logo_id_to_idx.keys()
 
     def get_index(self, logo_id: int) -> Optional[int]:
+        """Return the index associated with a logo in the ANN index.
+        
+        :param logo_id: The external ID of the logo
+        """
         return self.logo_id_to_idx.get(logo_id)
 
     def get_embedding(self, logo_id: int) -> Optional[np.ndarray]:
+        """Return the embedding of a logo.
+        
+        :param logo_id: The external ID of the logo
+        """
         idx = self.get_index(logo_id)
 
         if idx is None:
@@ -50,9 +67,11 @@ class EmbeddingStore:
 
         return None
 
-    def load(self):
-        if self.hdf5_path.is_file():
-            with h5py.File(self.hdf5_path, "r") as f:
+    @staticmethod
+    def load_logo_id_to_index(hdf5_path: pathlib.Path) -> Dict[int, int]:
+        """Read the HDF5 file and generate the logo ID to index mapping."""
+        if hdf5_path.is_file():
+            with h5py.File(hdf5_path, "r") as f:
                 external_id_dset = f["external_id"]
                 array = external_id_dset[:]
                 non_zero_indexes = np.flatnonzero(array)
@@ -62,6 +81,7 @@ class EmbeddingStore:
         return {}
 
     def iter_embeddings(self) -> Iterable[Tuple[int, np.ndarray]]:
+        """Iterate over HDF5 file and yield (logo_id, embedding) tuples."""
         if not self.hdf5_path.is_file():
             return
 
@@ -81,7 +101,13 @@ class EmbeddingStore:
         embeddings: np.ndarray,
         external_ids: np.ndarray,
     ):
-        """Add new image embeddings to the store"""
+        """Add new logo embeddings to the store.
+        
+        :param embeddings: a numpy array of embeddings, of shape
+        (num_logos, embedding_size).
+        :param external_ids: a numpy array of external IDs (integer) of shape
+        (num_logos, ).
+        """
         file_exists = self.hdf5_path.is_file()
 
         with h5py.File(self.hdf5_path, "a") as f:
@@ -130,6 +156,8 @@ def generate_embeddings(model, images: np.ndarray, device: torch.device) -> np.n
 def crop_image(
     image: Image.Image, bounding_box: Tuple[float, float, float, float]
 ) -> Image.Image:
+    """Crop the image given provided bounding box (y_min, x_min, y_max, x_max),
+    with upper-left corner as (0, 0)."""
     y_min, x_min, y_max, x_max = bounding_box
     (left, right, top, bottom) = (
         x_min * image.width,
@@ -146,8 +174,16 @@ def add_logos(
     bounding_boxes: List[Tuple[float, float, float, float]],
     device: Optional[torch.device] = None,
 ) -> int:
-    """Compute embeddings for logo extracted from a image
-    and add them to the store.
+    """Compute embeddings for logo extracted from a image and add them to the
+    EmbeddingStore.
+    
+    We only add logos that do not already exist in the EmbeddingStore.
+
+    :param image: The base image
+    :param external_ids: The list of external IDs (LogoAnnotation.id)
+    :param bounding_box: The bounding boxes of the detected logos. The list must
+    be of the same size as `external_ids`
+    :param device: The torch device to use to compute the embeddings
     """
     if device is None:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -182,6 +218,7 @@ def add_logos(
 
 
 class ModelStore:
+    """Simple class to store in memory the embedding models."""
     store: Dict[str, Any] = {}
 
     @classmethod
