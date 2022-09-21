@@ -117,10 +117,6 @@ class EmbeddingStore:
 EMBEDDING_STORE = EmbeddingStore(settings.EMBEDDINGS_HDF5_PATH)
 
 
-def build_model(model_type: str):
-    return EfficientNet.from_pretrained(model_type)
-
-
 def generate_embeddings(model, images: np.ndarray, device: torch.device) -> np.ndarray:
     images = np.moveaxis(images, -1, 1)  # move channel dim to 1st dim
 
@@ -142,10 +138,6 @@ def crop_image(
         y_max * image.height,
     )
     return image.crop((left, top, right, bottom))
-
-
-def get_embedding(logo_id: int) -> Optional[np.ndarray]:
-    return EMBEDDING_STORE.get_embedding(logo_id)
 
 
 def add_logos(
@@ -195,7 +187,7 @@ class ModelStore:
     @classmethod
     def get(cls, model_name: str, device: torch.device):
         if model_name not in cls.store:
-            model = build_model(model_name)
+            model = EfficientNet.from_pretrained(model_name)
             model = model.to(device)
             cls.store[model_name] = model
 

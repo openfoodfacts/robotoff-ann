@@ -12,22 +12,12 @@ from sentry_sdk.integrations.falcon import FalconIntegration
 
 import schema
 import settings
-from embeddings import EMBEDDING_STORE, add_logos, get_embedding
+from embeddings import EMBEDDING_STORE, add_logos
 from utils import get_image_from_url, get_logger, text_file_iter
 
 logger = get_logger()
 
 settings.init_sentry(integrations=[FalconIntegration()])
-
-
-def load_index(file_path: pathlib.Path, dimension: int) -> annoy.AnnoyIndex:
-    index = annoy.AnnoyIndex(dimension, "euclidean")
-    index.load(str(file_path), prefault=True)
-    return index
-
-
-def load_keys(file_path: pathlib.Path) -> List[int]:
-    return [int(x) for x in text_file_iter(file_path)]
 
 
 class ANNIndex:
@@ -41,8 +31,9 @@ class ANNIndex:
     @classmethod
     def load(cls, index_dir: pathlib.Path) -> "ANNIndex":
         dimension = settings.INDEX_DIM[index_dir.name]
-        index = load_index(index_dir / settings.INDEX_FILE_NAME, dimension)
-        keys = load_keys(index_dir / settings.KEYS_FILE_NAME)
+        index = annoy.AnnoyIndex(dimension, "euclidean")
+        index.load(str(index_dir / settings.INDEX_FILE_NAME), prefault=True)
+        keys = [int(x) for x in text_file_iter(index_dir / settings.KEYS_FILE_NAME)]
         return cls(index, keys)
 
 
@@ -117,7 +108,7 @@ def get_nearest_neighbors(
         logger.info("Successfully retrieved distances and indexes")
     else:
         logger.info(f"Trying to get an embedding for logo `{logo_id}`")
-        embedding = get_embedding(logo_id)
+        embedding = EMBEDDING_STORE.get_embedding(logo_id)
         logger.info(f"Found an embedding: {embedding}")
         if embedding is None:
             return None
