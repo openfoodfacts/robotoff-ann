@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.0](https://github.com/openfoodfacts/robotoff-ann/compare/v1.1.0...v1.2.0) (2022-11-21)
+
+
+### Features
+
+* improve bug report ([d86ad5c](https://github.com/openfoodfacts/robotoff-ann/commit/d86ad5c672269a7df71b343ae0845b3371c5ff3b))
+* improve template for feature request ([df83f85](https://github.com/openfoodfacts/robotoff-ann/commit/df83f8543d7f8bed7332e65b381771ab65e688b8))
+* improve the bug report template ([f437e62](https://github.com/openfoodfacts/robotoff-ann/commit/f437e6280760c6e5bb837b53b056ad1d0f103f04))
+
 ## 1.0.0 (2021-09-30)
 
 
