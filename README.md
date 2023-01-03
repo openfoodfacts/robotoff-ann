@@ -1,5 +1,9 @@
 # Robotoff ANN
 
+**This project is archived, as we now use Elasticsearch to perform ANN. We don't need anymore an external service to serve index files, everything related to ANN is done in Robotoff directly**.
+
+---
+
 This project helps [robotoff](https://github.com/openfoodfacts/robotoff) in categorizing logos. Bug tracking is mostly [done on the main Robotoff repository](https://github.com/openfoodfacts/robotoff/issues/596)
 ## Tangible results
 * You can see all the crops generated and up for manual annotation in [Hunger Games](https://hunger.openfoodfacts.org/logos), our gamified annotation engine.
